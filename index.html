@@ -17,18 +17,9 @@
 
         #countdown {
             font-size: 2em;
-            animation: slideDown 1s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 1s ease, transform 1s ease;
         }
     </style>
     <title>Countdown</title>
@@ -41,9 +32,8 @@
     // Set the date we're counting down to
     var countDownDate = new Date("Mar 2, 2024 18:00:00").getTime();
 
-    // Update the countdown every 1 second
-    var x = setInterval(function () {
-
+    // Function to update the countdown
+    function updateCountdown() {
         // Get the current date and time
         var now = new Date().getTime();
 
@@ -56,16 +46,25 @@
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Display the countdown
-        document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
-
-        // If the countdown is over, display a message
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("countdown").innerHTML = "EXPIRED";
+        // Display the countdown with animation only if the text changes
+        var countdownText = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+        if (document.getElementById("countdown").innerHTML !== countdownText) {
+            // Apply the sliding animation
+            document.getElementById("countdown").style.opacity = 0;
+            document.getElementById("countdown").style.transform = "translateY(-20px)";
+            setTimeout(function () {
+                document.getElementById("countdown").innerHTML = countdownText;
+                document.getElementById("countdown").style.opacity = 1;
+                document.getElementById("countdown").style.transform = "translateY(0)";
+            }, 500); // You can adjust the duration of the animation here
         }
-    }, 1000);
+    }
+
+    // Update the countdown every 1 second
+    var x = setInterval(updateCountdown, 1000);
+
+    // Initial update
+    updateCountdown();
 </script>
 
 </body>
