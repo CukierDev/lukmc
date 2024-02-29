@@ -46,23 +46,27 @@
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Display the countdown with sliding animation for each character
+        // Display the countdown with sliding animation for the last character only
         var countdownText = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
         var countdownElement = document.getElementById("countdown");
         countdownElement.innerHTML = ''; // Clear existing content
 
-        for (var i = 0; i < countdownText.length; i++) {
+        for (var i = 0; i < countdownText.length - 1; i++) {
             var charSpan = document.createElement('span');
-            charSpan.className = 'countdown-char';
             charSpan.textContent = countdownText[i];
             countdownElement.appendChild(charSpan);
-
-            // Trigger animation for each character
-            setTimeout(function (span) {
-                span.style.opacity = 1;
-                span.style.transform = "translateY(0)";
-            }, i * 100, charSpan); // You can adjust the delay between characters here
         }
+
+        var lastCharSpan = document.createElement('span');
+        lastCharSpan.className = 'countdown-char';
+        lastCharSpan.textContent = countdownText[countdownText.length - 1];
+        countdownElement.appendChild(lastCharSpan);
+
+        // Trigger animation for the last character
+        setTimeout(function () {
+            lastCharSpan.style.opacity = 1;
+            lastCharSpan.style.transform = "translateY(0)";
+        }, 100); // You can adjust the delay for the last character here
     }
 
     // Update the countdown every 1 second
